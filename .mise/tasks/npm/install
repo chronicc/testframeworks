@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# mise description="Install javascript dependencies"
+
+# We need to install pip-tools first to get access to pip-compile
+if ! command -v pip-compile 2>&1 >/dev/null
+then
+    echo ">>> Installing pip-tools"
+    pip install pip-tools
+fi
+
+echo ">>> Compiling requirements.txt"
+pip-compile --output-file=requirements.txt --strip-extras --quiet requirements.in
+
+echo ">>> Synching python requirements"
+pip-sync

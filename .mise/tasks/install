@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# mise description="Install project dependencies"
+# mise depends=["pip:install", "npm:install"]
+
+# Install the Visual Code settings if one is provided by the project.
+if [ ! -f .vscode/settings.json ] && [ -f .mise/templates/settings.json ];
+then
+    echo "No .vscode/settings.json found, copying from mise template."
+    mkdir -p .vscode
+    cp .mise/templates/settings.json .vscode/settings.json
+fi
