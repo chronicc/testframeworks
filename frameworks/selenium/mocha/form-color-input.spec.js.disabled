@@ -1,0 +1,46 @@
+const {By, Browser, Builder} = require('selenium-webdriver');
+const assert = require("assert");
+const fs = require('fs');
+
+const env = process.env.ENVIRONMENT || 'local';
+const {browsers, setupDriver, teardownDriver} = require('./_setup-' + env);
+
+describe('Form Color Input', function () {
+  let screenshotDir = __dirname + '/screenshots/';
+
+  browsers.forEach((browser) => {
+    let driver;
+
+    before(async () => {
+      driver = await setupDriver(browser);
+      if (!fs.existsSync(screenshotDir)) {
+        fs.mkdirSync(screenshotDir);
+      }
+    });
+    after(async () => await teardownDriver(driver));
+
+    it(browser + ': Should select a different color', async function () {
+      await driver.get('https://www.selenium.dev/selenium/web/web-form.html');
+
+      let title = await driver.getTitle();
+      assert.equal("Web form", title);
+
+      await driver.manage().setTimeouts({implicit: 500});
+
+      let colorElement = await driver.findElement(By.name('my-colors'));
+      let submitButton = await driver.findElement(By.css('button'));
+
+      await colorElement.sendKeys('#000000');
+      let screenshot = await driver.takeScreenshot();
+      fs.writeFileSync(screenshotDir + 'form_color_input.png', screenshot, 'base64');
+
+      let newColor = await colorElement.getAttribute('value');
+      assert.equal('#000000', newColor);
+      await submitButton.click();
+
+      let message = await driver.findElement(By.id('message'));
+      let value = await message.getText();
+      assert.equal("Received!", value);
+    });
+  });
+});
