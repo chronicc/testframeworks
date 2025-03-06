@@ -1,0 +1,23 @@
+---
+services:
+  website:
+    image: bkimminich/juice-shop
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.environment==testing
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.juice-shop.entrypoints=websecure
+        - traefik.http.routers.juice-shop.rule=Host(`juice-shop.${SWARM_DOMAIN}`)
+        - traefik.http.routers.juice-shop.tls.certresolver=letsencrypt
+        - traefik.http.routers.juice-shop.tls=true
+        - traefik.http.services.juice-shop.loadbalancer.server.port=3000
+        - traefik.swarm.network=proxy
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
