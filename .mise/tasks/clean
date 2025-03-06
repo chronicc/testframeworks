@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# mise description="Remove temporary files"
+
+cd $root
+
+rm -rf .pytest_cache
+rm -rf .venv
+find -iname "*.pyc" -delete

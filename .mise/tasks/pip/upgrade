@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# mise description="Upgrade python dependencies"
+
+echo ">>> Compiling requirements.txt with updated dependencies"
+pip-compile --upgrade --output-file=requirements.txt --strip-extras --quiet requirements.in
+
+echo ">>> Upgrading pip"
+pip install --upgrade pip
+
+echo ">>> Synching python requirements"
+pip-sync

@@ -1,0 +1,9 @@
+[env]
+# Copy these variables to .mise.local.toml and set them to your own values.
+# Don't add these values here unless you want them leaked to the public.
+# SWARM_DOMAIN=""
+
+[tools]
+"aqua:lycheeverse/lychee" = "latest"
+node = "23"
+python = "3.13"
